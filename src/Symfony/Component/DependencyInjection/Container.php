@@ -11,6 +11,7 @@
 
 namespace Symfony\Component\DependencyInjection;
 
+use Interop\Container\ContainerInterface;
 use Symfony\Component\DependencyInjection\Exception\InactiveScopeException;
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Exception\RuntimeException;
@@ -60,7 +61,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\FrozenParameterBag;
  *
  * @api
  */
-class Container implements IntrospectableContainerInterface
+class Container implements IntrospectableContainerInterface, ContainerInterface
 {
     /**
      * @var ParameterBagInterface
@@ -76,6 +77,11 @@ class Container implements IntrospectableContainerInterface
     protected $scopeStacks = array();
     protected $loading = array();
 
+    /**
+     * @var ContainerInterface
+     */
+    protected $delegateContainer;
+
     private $underscoreMap = array('_' => '', '.' => '_', '\\' => '_');
 
     /**
@@ -88,6 +94,15 @@ class Container implements IntrospectableContainerInterface
     public function __construct(ParameterBagInterface $parameterBag = null)
     {
         $this->parameterBag = $parameterBag ?: new ParameterBag();
+        $this->delegateContainer = $this;
+    }
+
+    /**
+     * @param ContainerInterface $delegateContainer
+     */
+    public function setDelegateContainer(ContainerInterface $delegateContainer)
+    {
+        $this->delegateContainer = $delegateContainer;
     }
 
     /**

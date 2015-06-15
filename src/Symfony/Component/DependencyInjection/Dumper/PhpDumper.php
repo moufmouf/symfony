@@ -718,7 +718,7 @@ EOF;
                             $arguments[] = $this->dumpValue($value);
                         }
 
-                        $call = $this->wrapServiceConditionals($call[1], sprintf("\$this->get('%s')->%s(%s);", $definitionId, $call[0], implode(', ', $arguments)));
+                        $call = $this->wrapServiceConditionals($call[1], sprintf("\$this->delegateContainer->get('%s')->%s(%s);", $definitionId, $call[0], implode(', ', $arguments)));
 
                         $code .= <<<EOF
         if (\$this->initialized('$definitionId')) {
@@ -901,6 +901,7 @@ EOF;
 
         $code .= <<<EOF
 
+        \$this->delegateContainer = \$this;
         \$this->services =
         \$this->scopedServices =
         \$this->scopeStacks = array();
@@ -1337,7 +1338,7 @@ EOF;
                 } elseif (null !== $value->getFactoryService(false)) {
                     $service = $this->dumpValue($value->getFactoryService(false));
 
-                    return sprintf('%s->%s(%s)', 0 === strpos($service, '$') ? sprintf('$this->get(%s)', $service) : $this->getServiceCall($value->getFactoryService(false)), $value->getFactoryMethod(false), implode(', ', $arguments));
+                    return sprintf('%s->%s(%s)', 0 === strpos($service, '$') ? sprintf('$this->delegateContainer->get(%s)', $service) : $this->getServiceCall($value->getFactoryService(false)), $value->getFactoryMethod(false), implode(', ', $arguments));
                 } else {
                     throw new RuntimeException('Cannot dump definitions which have factory method without factory service or factory class.');
                 }
@@ -1434,13 +1435,14 @@ EOF;
         }
 
         if (null !== $reference && ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE !== $reference->getInvalidBehavior()) {
+            // FIXME: delegate container must be added here.
             return sprintf('$this->get(\'%s\', ContainerInterface::NULL_ON_INVALID_REFERENCE)', $id);
         } else {
             if ($this->container->hasAlias($id)) {
                 $id = (string) $this->container->getAlias($id);
             }
 
-            return sprintf('$this->get(\'%s\')', $id);
+            return sprintf('$this->delegateContainer->get(\'%s\')', $id);
         }
     }
 
