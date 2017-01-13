@@ -11,6 +11,7 @@
 
 namespace Symfony\Component\Form\Tests\Extension\DependencyInjection;
 
+use Symfony\Component\DependencyInjection\Exception\RequestedServiceNotFoundException;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\Form\Extension\DependencyInjection\DependencyInjectionExtension;
 
@@ -46,7 +47,7 @@ class DependencyInjectionExtensionTest extends \PHPUnit_Framework_TestCase
                     return $services[$id];
                 }
 
-                throw new ServiceNotFoundException($id);
+                throw new RequestedServiceNotFoundException($id);
             });
 
         $extension = new DependencyInjectionExtension($container, array(), array('test' => array('extension1', 'extension2'), 'other' => array('extension3')), array());

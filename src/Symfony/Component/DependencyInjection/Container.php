@@ -13,6 +13,7 @@ namespace Symfony\Component\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\Exception\EnvNotFoundException;
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
+use Symfony\Component\DependencyInjection\Exception\RequestedServiceNotFoundException;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -249,7 +250,7 @@ class Container implements ResettableContainerInterface
      * @return object The associated service
      *
      * @throws ServiceCircularReferenceException When a circular reference is detected
-     * @throws ServiceNotFoundException          When the service is not defined
+     * @throws RequestedServiceNotFoundException When the service is not defined
      * @throws \Exception                        if an exception has been thrown when the service has been resolved
      *
      * @see Reference
@@ -289,7 +290,7 @@ class Container implements ResettableContainerInterface
             } else {
                 if (self::EXCEPTION_ON_INVALID_REFERENCE === $invalidBehavior) {
                     if (!$id) {
-                        throw new ServiceNotFoundException($id);
+                        throw new RequestedServiceNotFoundException($id);
                     }
 
                     $alternatives = array();
@@ -300,7 +301,7 @@ class Container implements ResettableContainerInterface
                         }
                     }
 
-                    throw new ServiceNotFoundException($id, null, null, $alternatives);
+                    throw new RequestedServiceNotFoundException($id, null, $alternatives);
                 }
 
                 return;

@@ -20,6 +20,7 @@ use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\Exception\BadMethodCallException;
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Exception\LogicException;
+use Symfony\Component\DependencyInjection\Exception\RequestedServiceNotFoundException;
 use Symfony\Component\DependencyInjection\Exception\RuntimeException;
 use Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
@@ -811,7 +812,7 @@ class ContainerBuilder extends Container implements TaggedContainerInterface
         $id = $this->normalizeId($id);
 
         if (!isset($this->definitions[$id])) {
-            throw new ServiceNotFoundException($id);
+            throw new RequestedServiceNotFoundException($id);
         }
 
         return $this->definitions[$id];

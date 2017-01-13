@@ -179,7 +179,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
             $sc->get('');
             $this->fail('->get() throws a \InvalidArgumentException exception if the service is empty');
         } catch (\Exception $e) {
-            $this->assertInstanceOf('Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException', $e, '->get() throws a ServiceNotFoundException exception if the service is empty');
+            $this->assertInstanceOf('Symfony\Component\DependencyInjection\Exception\RequestedServiceNotFoundException', $e, '->get() throws a ServiceNotFoundException exception if the service is empty');
         }
         $this->assertNull($sc->get('', ContainerInterface::NULL_ON_INVALID_REFERENCE), '->get() returns null if the service is empty');
     }
@@ -244,7 +244,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
             $sc->get('');
             $this->fail('->get() throws a \InvalidArgumentException exception if the service is empty');
         } catch (\Exception $e) {
-            $this->assertInstanceOf('Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException', $e, '->get() throws a ServiceNotFoundException exception if the service is empty');
+            $this->assertInstanceOf('Symfony\Component\DependencyInjection\Exception\RequestedServiceNotFoundException', $e, '->get() throws a RequestedServiceNotFoundException exception if the service is empty');
         }
         $this->assertNull($sc->get('', ContainerInterface::NULL_ON_INVALID_REFERENCE), '->get() returns null if the service is empty');
     }
@@ -257,18 +257,18 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
         try {
             $sc->get('foo1');
-            $this->fail('->get() throws an Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException if the key does not exist');
+            $this->fail('->get() throws an Symfony\Component\DependencyInjection\Exception\RequestedServiceNotFoundException if the key does not exist');
         } catch (\Exception $e) {
-            $this->assertInstanceOf('Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException', $e, '->get() throws an Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException if the key does not exist');
-            $this->assertEquals('You have requested a non-existent service "foo1". Did you mean this: "foo"?', $e->getMessage(), '->get() throws an Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException with some advices');
+            $this->assertInstanceOf('Symfony\Component\DependencyInjection\Exception\RequestedServiceNotFoundException', $e, '->get() throws an Symfony\Component\DependencyInjection\Exception\RequestedServiceNotFoundException if the key does not exist');
+            $this->assertEquals('You have requested a non-existent service "foo1". Did you mean this: "foo"?', $e->getMessage(), '->get() throws an Symfony\Component\DependencyInjection\Exception\RequestedServiceNotFoundException with some advices');
         }
 
         try {
             $sc->get('bag');
-            $this->fail('->get() throws an Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException if the key does not exist');
+            $this->fail('->get() throws an Symfony\Component\DependencyInjection\Exception\RequestedServiceNotFoundException if the key does not exist');
         } catch (\Exception $e) {
-            $this->assertInstanceOf('Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException', $e, '->get() throws an Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException if the key does not exist');
-            $this->assertEquals('You have requested a non-existent service "bag". Did you mean one of these: "bar", "baz"?', $e->getMessage(), '->get() throws an Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException with some advices');
+            $this->assertInstanceOf('Symfony\Component\DependencyInjection\Exception\RequestedServiceNotFoundException', $e, '->get() throws an Symfony\Component\DependencyInjection\Exception\RequestedServiceNotFoundException if the key does not exist');
+            $this->assertEquals('You have requested a non-existent service "bag". Did you mean one of these: "bar", "baz"?', $e->getMessage(), '->get() throws an Symfony\Component\DependencyInjection\Exception\RequestedServiceNotFoundException with some advices');
         }
     }
 
